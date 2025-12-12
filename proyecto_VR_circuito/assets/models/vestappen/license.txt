@@ -1,0 +1,11 @@
+Model Information:
+* title:	Max Vestappen
+* source:	https://sketchfab.com/3d-models/max-vestappen-c8a1e34aaa7c47d99debc806cd688a32
+* author:	rafaelferreira.1808 (https://sketchfab.com/rafaelferreira.1808)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Max Vestappen" (https://sketchfab.com/3d-models/max-vestappen-c8a1e34aaa7c47d99debc806cd688a32) by rafaelferreira.1808 (https://sketchfab.com/rafaelferreira.1808) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

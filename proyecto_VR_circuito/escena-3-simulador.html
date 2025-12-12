@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Simulador de Carreras - Menú</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <style>
+      body { margin: 0; padding: 0; overflow: hidden; }
+      #menu {
+        position: fixed;
+        inset: 0;
+        background: #111;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: sans-serif;
+      }
+      #menu h1 { color: white; font-size: 3rem; margin-bottom: 30px; text-align: center; }
+      #menu button {
+        padding: 15px 30px; font-size: 1.3rem; font-weight: bold;
+        border: none; border-radius: 8px; cursor: pointer;
+        background: #ff3c00; color: white; transition: 0.2s;
+      }
+      #menu button:hover { background: #ffaa00; }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- MENÚ INICIAL -->
+    <div id="menu">
+      <h1>Bienvenido al Simulador de Carreras</h1>
+      <button id="btnStart">Entrar</button>
+    </div>
+
+    <!-- ESCENA VR -->
+    <a-scene id="escena" background="color: #222">
+
+      <!-- ASSETS -->
+      <a-assets timeout="20000">
+        <a-asset-item id="cocheModel" src="assets/models/coche.gltf"></a-asset-item>
+        <audio id="motorAudio" src="assets/sounds/motor.mp3"></audio>
+        <img id="gradasImg" src="assets/images/gradas.jpg">
+        <img id="gradas2Img" src="assets/images/gradas2.jpg">
+      </a-assets>
+
+      <!-- CIELO -->
+      <a-sky color="#87CEEB"></a-sky>
+
+      <!-- GRADAS IZQUIERDA -->
+      <a-entity geometry="primitive: plane; width: 50; height: 15"
+                material="src: #gradasImg; repeat: 4 1"
+                position="-12 7 -25"
+                rotation="0 90 0">
+      </a-entity>
+
+      <!-- GRADAS DERECHA -->
+      <a-entity geometry="primitive: plane; width: 50; height: 15"
+                material="src: #gradas2Img; repeat: 4 1"
+                position="12 7 -25"
+                rotation="0 -90 0">
+      </a-entity>
+
+      <!-- PISTA -->
+      <a-plane rotation="-90 0 0" width="6" height="50" color="#333" position="0 0.01 -25"></a-plane>
+
+      <!-- LÍNEAS -->
+      <a-plane rotation="-90 0 0" width="0.2" height="50" color="#fff" position="-3 0.02 -25"></a-plane>
+      <a-plane rotation="-90 0 0" width="0.2" height="50" color="#fff" position="3 0.02 -25"></a-plane>
+
+      <!-- CÉSPED -->
+      <a-plane rotation="-90 0 0" width="200" height="50" color="#0a0" position="0 0 -25"></a-plane>
+
+      <!-- LÍNEA DE SALIDA -->
+      <a-plane rotation="-90 0 0"
+               width="6"
+               height="0.3"
+               color="#fff"
+               position="0 0.03 -6.5">
+      </a-plane>
+
+      <!-- COCHE -->
+      <a-entity id="coche" position="0 0 -6" rotation="0 180 0">
+        <a-entity gltf-model="#cocheModel" scale="1 1 1"></a-entity>
+
+        <!-- sonido + movimiento -->
+        <a-entity sound="src: #motorAudio; autoplay: false; loop: true; volume: 1"
+                  mover-coche="inicio: 0 0 -6; fin: 0 0 -50; velocidad: 12">
+        </a-entity>
+      </a-entity>
+
+      <!-- PANEL FIJO A LA DERECHA DE LA PISTA (PEGADO AL SUELO) -->
+      <a-entity id="panel-wrapper" position="6 0.2 -15" rotation="0 -90 0">
+        <a-box position="-0.45 0 -0.05" depth="0.05" height="1.2" width="0.07" material="color: #333"></a-box>
+        <a-box position="0.45 0 -0.05" depth="0.05" height="1.2" width="0.07" material="color: #333"></a-box>
+        <a-box position="0 0.6 -0.05" depth="0.05" height="0.07" width="1.0" material="color: #333"></a-box>
+
+        <a-plane id="panelVel"
+                 position="0 0.2 -0.11"
+                 width="0.9" height="0.5"
+                 material="color: #000; opacity: 0.9"
+                 text="value: Velocidad: 0 km/h; color: #0f0; align: center; width: 2">
+        </a-plane>
+        
+      </a-entity>
+
+      <!-- CÁMARA -->
+      <a-entity id="camara" camera look-controls wasd-controls position="2 1.6 -3"></a-entity>
+
+      <!-- COMPONENTE: MOVER COCHE -->
+<script>
+  AFRAME.registerComponent('mover-coche', {
+    schema: { inicio:{type:'vec3'}, fin:{type:'vec3'}, velocidad:{type:'number'} },
+
+    init: function () {
+      this.resetPos();
+      this.panel = document.querySelector('#panelVel');
+    },
+
+    resetPos() {
+      this.pos = new THREE.Vector3(this.data.inicio.x, this.data.inicio.y, this.data.inicio.z);
+      this.meta = new THREE.Vector3(this.data.fin.x, this.data.fin.y, this.data.fin.z);
+      this.dir = new THREE.Vector3().subVectors(this.meta, this.pos).normalize();
+    },
+
+    tick: function (time, delta) {
+      const dt = delta / 1000;
+      this.pos.addScaledVector(this.dir, this.data.velocidad * dt);
+
+      document.querySelector('#coche')
+        .setAttribute('position', `${this.pos.x} ${this.pos.y} ${this.pos.z}`);
+
+      if (this.pos.distanceTo(this.meta) < 0.3) this.resetPos();
+
+      /* VELOCIDAD ALEATORIA (80 a 220 km/h) */
+      const kmh = Math.floor(Math.random() * (220 - 80 + 1)) + 80;
+
+      this.panel.setAttribute('text', 'value', `Velocidad: ${kmh} km/h`);
+    }
+  });
+</script>
+
+
+      <!-- INICIO + POINTER LOCK -->
+      <script>
+        const escena = document.querySelector("#escena");
+
+        escena.addEventListener("loaded", () => {
+          const canvas = escena.canvas;
+
+          document.getElementById("btnStart").addEventListener("click", () => {
+            document.getElementById("menu").style.display = "none";
+
+            const camara = document.querySelector("#camara");
+            camara.setAttribute("look-controls", "enabled: true");
+            camara.setAttribute("wasd-controls", "enabled: true");
+
+            if (canvas.requestPointerLock) canvas.requestPointerLock();
+
+            const cocheSound = document.querySelector('#coche [sound]');
+            if (cocheSound?.components?.sound) cocheSound.components.sound.playSound();
+          });
+        });
+      </script>
+
+    </a-scene>
+  </body>
+</html>

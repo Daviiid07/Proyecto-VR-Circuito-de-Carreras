@@ -1,0 +1,11 @@
+Model Information:
+* title:	ejercicio 4 caja
+* source:	https://sketchfab.com/3d-models/ejercicio-4-caja-2ea54692367242169538921e10113301
+* author:	carlos1972 (https://sketchfab.com/carlos1972)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "ejercicio 4 caja" (https://sketchfab.com/3d-models/ejercicio-4-caja-2ea54692367242169538921e10113301) by carlos1972 (https://sketchfab.com/carlos1972) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

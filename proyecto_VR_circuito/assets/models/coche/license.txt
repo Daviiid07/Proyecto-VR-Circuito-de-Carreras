@@ -1,0 +1,11 @@
+Model Information:
+* title:	Formula 1 2022 Car
+* source:	https://sketchfab.com/3d-models/formula-1-2022-car-65dcd974798f4f03be5cdf4f79e228d8
+* author:	luis.adrian.villagrana (https://sketchfab.com/luis.adrian.villagrana)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Formula 1 2022 Car" (https://sketchfab.com/3d-models/formula-1-2022-car-65dcd974798f4f03be5cdf4f79e228d8) by luis.adrian.villagrana (https://sketchfab.com/luis.adrian.villagrana) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

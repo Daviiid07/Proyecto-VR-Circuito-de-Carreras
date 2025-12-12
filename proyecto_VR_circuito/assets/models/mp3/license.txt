@@ -1,0 +1,11 @@
+Model Information:
+* title:	mp3 player
+* source:	https://sketchfab.com/3d-models/mp3-player-1caa0de6536d4d40ae5f68e593b4d9c0
+* author:	honehonekun0515 (https://sketchfab.com/honehonekun0515)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "mp3 player" (https://sketchfab.com/3d-models/mp3-player-1caa0de6536d4d40ae5f68e593b4d9c0) by honehonekun0515 (https://sketchfab.com/honehonekun0515) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

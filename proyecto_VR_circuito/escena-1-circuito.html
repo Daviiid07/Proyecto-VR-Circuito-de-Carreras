@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Escena 1 - Circuito 360°</title>
+        <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    </head>
+    <body>
+        <a-scene>
+            <!-- Imagen 360 del circuito -->
+            <a-sky src="assets/360/img360.jpg" rotation="0 -90 0"></a-sky>
+
+            <!-- Cámara fija -->
+            <a-camera 
+                position="0 1.6 0" 
+                look-controls="enabled: true" 
+                wasd-controls="enabled: false">
+            </a-camera>
+
+            <!-- Sonido ambiente -->
+            <a-entity sound="src: url(assets/sounds/ambiente.mp3); autoplay: true; loop: true; volume: 1"></a-entity>
+
+            <!-- Sonido aceleracion breve -->
+            <a-entity id="aceleracion" 
+                sound="src: url(assets/sounds/aceleracion.mp3); autoplay: false; volume: 1">
+            </a-entity>
+            <script>
+                AFRAME.registerComponent('sonido-timer', {
+                    init: function () {
+                        const sonido = document.querySelector('#aceleracion').components.sound;
+
+                        function reproducir() {
+                            sonido.playSound();
+                            setTimeout(reproducir, 60000);
+                        }
+
+                        setTimeout(reproducir, 1500);
+                    }
+                });
+            </script>
+            <a-entity sonido-timer></a-entity>
+
+            <!-- Portal -->
+            <a-entity id="portal"
+                geometry="primitive: ring; radiusInner: 0.8; radiusOuter: 1.2"
+                material="color: white; opacity: 0.9; shader: flat"
+                position="0 1.6 -3"
+                animation="property: material.color; to: red; dir: alternate; loop: true; dur: 800"
+                class="clickable"
+                portal-redirect>
+            </a-entity>
+            <a-entity geometry="primitive: torus; radius: 1.2; radiusTubular: 0.03"
+                material="color: #ff0000; emissive: #ff0000; emissiveIntensity: 0.7"
+                position="0 1.6 -3"
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear">
+            </a-entity>
+
+            <!-- Texto -->
+            <a-entity position="0 2 -1">
+                <a-text
+    value="Entrar al Box de Mecanicos"
+    color="red"
+    align="center"
+    width="3.5"
+    font="https://cdn.aframe.io/fonts/Roboto-msdf.json"
+    shader="msdf"
+    opacity="0.95"
+    animation="property: position; dir: alternate; dur: 1800; loop: true; to: 0 2.1 -1"
+    animation__glow="property: opacity; dir: alternate; dur: 1200; loop: true; to: 1"
+    rotation="0 0 0">
+</a-text>
+            </a-entity>
+
+            <!-- Script para acceder a la siguiente escena -->
+            <script>
+                AFRAME.registerComponent('portal-redirect', {
+                    init: function () {
+                        this.el.addEventListener('click', () => {
+                            window.location.href = "escena-2-box.html"; 
+                        });
+                    }
+                });
+            </script>
+
+            <!-- Cursor -->
+            <a-entity cursor="rayOrigin: mouse"></a-entity>
+        </a-scene>
+    </body>
+</html>

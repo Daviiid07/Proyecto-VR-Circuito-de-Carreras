@@ -1,0 +1,11 @@
+Model Information:
+* title:	1995 Ferrari F50
+* source:	https://sketchfab.com/3d-models/1995-ferrari-f50-9d7ec096be3546e3967ebdb5e4a87e31
+* author:	Ddiaz Design (https://sketchfab.com/ddiaz-design)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "1995 Ferrari F50" (https://sketchfab.com/3d-models/1995-ferrari-f50-9d7ec096be3546e3967ebdb5e4a87e31) by Ddiaz Design (https://sketchfab.com/ddiaz-design) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

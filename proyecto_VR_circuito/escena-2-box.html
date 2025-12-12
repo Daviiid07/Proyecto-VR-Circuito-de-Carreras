@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Escena 2 Boxes</title>
+        <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+        <script>
+        /* --------------------------
+            COMPONENTE PARA CAMBIAR EL COCHE
+            -------------------------- */
+        AFRAME.registerComponent('car-switcher', {
+            init: function () {
+                this.models = [
+                    '#defecto',  // coche blanco por defecto
+                    '#aston',    // botón rojo
+                    '#mclaren'   // botón verde
+                ];
+
+                this.scales = ['0.2 0.2 0.2', '1.5 1.5 1.5', '1.3 1.3 1.3'];
+                this.rotations = ['0 90 0', '0 180 0', '0 180 0'];
+                this.positionsY = [0.7, 0, 0.7];
+                this.positionsZ = [-5, -5, -7];
+
+                this.currentCar = null;
+                this.switchCar(0); // Mostrar coche por defecto
+            },
+
+            switchCar: function(index){
+                if(this.currentCar) this.currentCar.parentNode.removeChild(this.currentCar);
+
+                const sceneEl = this.el.sceneEl;
+                const newCar = document.createElement('a-entity');
+                newCar.setAttribute('gltf-model', this.models[index]);
+
+                const basePos = this.el.getAttribute('position');
+                newCar.setAttribute('position', `${basePos.x} ${this.positionsY[index]} ${this.positionsZ[index]}`);
+                newCar.setAttribute('scale', this.scales[index]);
+                newCar.setAttribute('rotation', this.rotations[index]);
+
+                sceneEl.appendChild(newCar);
+                this.currentCar = newCar;
+            }
+        });
+
+        /* --------------------------
+            FUNCIONES GLOBALES
+            -------------------------- */
+        function cambiarCoche(index){
+            const switcher = document.querySelector('#coche').components['car-switcher'];
+            switcher.switchCar(index);
+        }
+
+        function irAEscena3(){
+            window.location.href = "escena-3-simulador.html";
+        }
+
+        function sonarMotor(){
+            const audio = document.getElementById("sonidoMotor");
+            audio.currentTime = 0;
+            audio.play();
+        }
+
+        /* --------------------------
+            COMPONENTE PARA REPRODUCIR CANCIÓN
+            -------------------------- */
+        AFRAME.registerComponent('play-song', {
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    const audio = document.getElementById('cancion');
+                    audio.currentTime = 0;
+                    audio.play();
+                });
+            }
+        });
+
+        /* --------------------------
+            COMPONENTE PARA MOSTRAR NOMBRE DE TROFEO
+            -------------------------- */
+        AFRAME.registerComponent('mostrar-trofeo', {
+            schema: { nombre: { type: 'string' } },
+
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    const panel = document.querySelector('#panelTrofeos');
+                    const texto = document.querySelector('#textoTrofeos');
+
+                    texto.setAttribute('value', this.data.nombre);
+                    panel.setAttribute('visible', true);
+
+                    setTimeout(() => {
+                        panel.setAttribute('visible', false);
+                    }, 3000);
+                });
+            }
+        });
+
+        /* --------------------------
+            COMPONENTE PARA QUE LOS ELEMENTOS MIREN A LA CÁMARA
+            -------------------------- */
+        AFRAME.registerComponent('look-at-camera', {
+            tick: function () {
+                const camera = document.querySelector('[camera]');
+                if(camera){
+                    this.el.object3D.lookAt(camera.object3D.position);
+                }
+            }
+        });
+        </script>
+    </head>
+
+    <body>
+        <a-scene physics="gravity: 0">
+
+            <!-- CURSOR -->
+            <a-entity cursor="fuse: false; rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
+
+            <!-- CÁMARA -->
+            <a-entity camera position="0 1.6 0" wasd-controls="acceleration:30" look-controls dynamic-body></a-entity>
+
+            <!-- LUZ AMBIENTAL GENERAL -->
+            <a-light type="ambient" color="#888"></a-light>
+
+            <!-- =========================
+                SUELO Y TECHO
+                ========================= -->
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="22" height="22" material="src: assets/textures/suelo.jpg; repeat: 4 4"></a-plane>
+            <a-plane position="0 4 -4" rotation="90 0 0" width="22" height="22" material="src: assets/textures/techo.jpg"></a-plane>
+
+            <!-- =========================
+                PAREDES
+                ========================= -->
+            <a-box position="0 1.5 -15" width="22" height="5" depth="0.1" material="src: assets/textures/pared.jpg" static-body></a-box>
+            <a-box position="0 1.5 -14.9" width="6" height="5" depth="0.1" material="src: assets/textures/puerta.jpg" static-body></a-box>
+            <a-box position="0 1.5 7" width="22" height="5" depth="0.1" material="src: assets/textures/pared.jpg" static-body></a-box>
+            <a-box position="-11 1.5 -4" rotation="0 90 0" width="22" height="5" depth="0.1" material="src: assets/textures/pared.jpg" static-body></a-box>
+            <a-box position="11 1.5 -4" rotation="0 90 0" width="22" height="5" depth="0.1" material="src: assets/textures/pared.jpg" static-body></a-box>
+
+            <!-- =========================
+                ASSETS (MODELOS 3D Y SONIDOS)
+                ========================= -->
+            <a-assets>
+                <!-- COCHES -->
+                <a-asset-item id="defecto" src="assets/models/coche/scene.gltf"></a-asset-item>
+                <a-asset-item id="mesa" src="assets/models/mesa/scene.gltf"></a-asset-item>
+                <a-asset-item id="aston" src="assets/models/aston/scene.gltf"></a-asset-item>
+                <a-asset-item id="mclaren" src="assets/models/mclaren/scene.gltf"></a-asset-item>
+                <a-asset-item id="jacksonStorm" src="assets/models/jacksonStorm/scene.gltf"></a-asset-item>
+                <a-asset-item id="jaguar" src="assets/models/jaguar/scene.gltf"></a-asset-item>
+                <a-asset-item id="lamborghini" src="assets/models/lamborghini/scene.gltf"></a-asset-item>
+                <a-asset-item id="mater" src="assets/models/mater/scene.gltf"></a-asset-item>
+                <a-asset-item id="ferrari" src="assets/models/ferrari/scene.gltf"></a-asset-item>
+                <a-asset-item id="mcqueen" src="assets/models/mcqueen/scene.gltf"></a-asset-item>
+                <a-asset-item id="ruedas" src="assets/models/ruedas/scene.gltf"></a-asset-item>
+                <a-asset-item id="caja" src="assets/models/caja/scene.gltf"></a-asset-item>
+                <a-asset-item id="vestappen" src="assets/models/vestappen/scene.gltf"></a-asset-item>
+
+                <!-- DECORACIÓN Y TROFEOS -->
+                <a-asset-item id="pedestal" src="assets/models/pedestal/scene.gltf"></a-asset-item>
+                <a-asset-item id="mp3" src="assets/models/mp3/scene.gltf"></a-asset-item>
+                <a-asset-item id="mesaTrofeos" src="assets/models/mesaTrofeos/scene.gltf"></a-asset-item>
+                <a-asset-item id="trofeo1" src="assets/models/trofeo1/scene.gltf"></a-asset-item>
+                <a-asset-item id="trofeo2" src="assets/models/trofeo2/scene.gltf"></a-asset-item>
+                <a-asset-item id="trofeo3" src="assets/models/trofeo3/scene.gltf"></a-asset-item>
+                <a-asset-item id="cuadro" src="assets/models/cuadro/scene.gltf"></a-asset-item>
+                <a-asset-item id="descanso" src="assets/models/descanso/scene.gltf"></a-asset-item>
+
+                <!-- SONIDOS -->
+                <audio id="sonidoMotor" src="assets/sounds/arranque.mp3"></audio>
+                <audio id="cancion" src="assets/sounds/cancion.mp3"></audio>
+            </a-assets>
+
+            <!-- =========================
+                COCHES INTERACTIVOS
+                ========================= -->
+            <a-entity id="coche" position="0 0.7 -5" car-switcher></a-entity>
+
+            <!-- =========================
+                MESA Y BOTONES
+                ========================= -->
+            <a-entity id="mesa" position="0 0.3 -1" gltf-model="#mesa" scale="1 1 1"></a-entity>
+            <a-entity position="0 0.8 -1">
+                <a-text value="Elige un coche" align="center" color="#ffffff" width="2" position="0 1 0"></a-text>
+                <a-box class="clickable" color="#ff0000" depth="0.2" height="0.2" width="0.2" position="-0.3 0.6 0" onclick="cambiarCoche(1)"></a-box>
+                <a-box class="clickable" color="#00ff00" depth="0.2" height="0.2" width="0.2" position="0.3 0.6 0" onclick="cambiarCoche(2)"></a-box>
+            </a-entity>
+
+            <!-- =========================
+                COCHES EN EXPOSICIÓN
+                ========================= -->
+            <a-entity id="lamborghini" position="7.9 0 -13.5" gltf-model="#lamborghini" scale="1 1 1"></a-entity>
+            <a-entity id="jacksonStorm" position="7.9 0 -10" gltf-model="#jacksonStorm" scale="1 1 1" rotation="0 270 0"></a-entity>
+            <a-entity id="ferrari" position="7.9 0 -6.5" gltf-model="#ferrari" scale="120 120 120" rotation="0 270 0"></a-entity>
+            <a-entity id="mcqueen" position="10 0.5 -0.5" gltf-model="#mcqueen" scale="2 2 2" rotation="0 270 0"></a-entity>
+            <a-entity id="jaguar" position="7.9 0 2.5" gltf-model="#jaguar" scale="120 120 120" rotation="0 270 0"></a-entity>
+            <a-entity id="mater" position="7.9 0 5.5" gltf-model="#mater" scale="1 1 1" rotation="0 270 0"></a-entity>
+
+            <!-- =========================
+                OTROS OBJETOS
+                ========================= -->
+            <a-entity id="ruedas" position="10.6 0 -2.6" gltf-model="#ruedas" scale="0.007 0.007 0.007" rotation="0 180 0"></a-entity>
+            <a-entity id="caja" position="-4 0.7 -14" gltf-model="#caja" scale="0.007 0.007 0.007"></a-entity>
+            <a-entity id="vestappen" class="clickable" position="-4 1.6 -14" gltf-model="#vestappen" scale="1 1 1" rotation="0 270 0" onclick="irAEscena3()"></a-entity>
+            <a-text value="Ir al simulador de carreras" align="center" color="#000000" width="3" position="-4 2.3 -14"></a-text>
+            <a-entity id="mp3" position="-5 0.15 -14.4" gltf-model="#mp3" scale="0.1 0.1 0.1" class="clickable" play-song></a-entity>
+
+            <!-- =========================
+                PEDESTAL Y BOTÓN MOTOR
+                ========================= -->
+            <a-entity id="pedestal" position="-3 0 -4" gltf-model="#pedestal" scale="0.1 0.1 0.1"></a-entity>
+            <a-box id="botonMotor" class="clickable" color="#ffaa00" depth="0.2" height="0.2" width="0.2" position="-3 1.26 -4" onclick="sonarMotor()"></a-box>
+            <a-text value="Arrancar motor" align="center" color="#ffffff" width="2" position="-3 1.8 -4"></a-text>
+
+            <!-- =========================
+                PARED DE IMAGENES
+                ========================= -->
+            <a-image position="0 2 6.93" src="assets/images/f1Logo.png" width="5" height="3.5" rotation="0 180 0"></a-image>
+
+            <!-- =========================
+                TROFEOS
+                ========================= -->
+            <a-entity id="mesaTrofeos" position="-10 1.2 -2" gltf-model="#mesaTrofeos" scale="2.5 2.5 2.5" rotation="0 90 0"></a-entity>
+
+            <a-entity id="trofeo1" class="clickable" mostrar-trofeo="nombre: Trofeo del Campeonato Regional" position="-10 1.2 -2" gltf-model="#trofeo1" scale="2.5 2.5 2.5" rotation="0 90 0"></a-entity>
+            <a-light type="point" color="#fff8dc" intensity="1.2" position="-10 3 -2" distance="5"></a-light>
+
+            <a-entity id="trofeo2" class="clickable" mostrar-trofeo="nombre: Trofeo Mejor Piloto" position="-10 1.2 -3" gltf-model="#trofeo2" scale="0.005 0.005 0.005" rotation="0 90 0"></a-entity>
+            <a-light type="point" color="#fff8dc" intensity="1.2" position="-10 3 -3" distance="5"></a-light>
+
+            <a-entity id="trofeo3" class="clickable" mostrar-trofeo="nombre: Trofeo Velocidad Maxima" position="-10 1.5 -0.9" gltf-model="#trofeo3" scale="0.3 0.3 0.3" rotation="0 90 0"></a-entity>
+            <a-light type="point" color="#fff8dc" intensity="1.2" position="-10 3 -0.9" distance="5"></a-light>
+
+            <!-- =========================
+                PANEL DE NOMBRE DE TROFEO
+                ========================= -->
+            <a-entity id="panelTrofeos" visible="false" look-at-camera position="-9 3 -2" rotation="0 90 0">
+                <a-plane width="3" height="1" color="#000000" opacity="0.7"></a-plane>
+                <a-text id="textoTrofeos" value="" align="center" color="#ffffff" width="2.8" position="0 0 0.01"></a-text>
+            </a-entity>
+
+            <!-- =========================
+                DECORACIÓN ADICIONAL
+                ========================= -->
+            <a-entity id="cuadro" position="-11 1.2 4" gltf-model="#cuadro" scale="0.4 0.4 0.4" rotation="0 90 0"></a-entity>
+            <a-image position="-10.8 1.8 4" src="assets/images/nano.jpg" width="2.6" height="1.78" rotation="0 90 0"></a-image>
+            <a-entity id="descanso" position="-10 0 -9.5" gltf-model="#descanso" scale="0.006 0.006 0.006" rotation="0 90 0"></a-entity>
+
+        </a-scene>
+    </body>
+</html>

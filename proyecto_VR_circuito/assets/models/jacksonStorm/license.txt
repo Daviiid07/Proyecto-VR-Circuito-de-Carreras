@@ -1,0 +1,11 @@
+Model Information:
+* title:	2025 Jackson Storm
+* source:	https://sketchfab.com/3d-models/2025-jackson-storm-1fbf56ab33784349ad02622bd82c4b4c
+* author:	supercarmodels (https://sketchfab.com/supercarmodels)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "2025 Jackson Storm" (https://sketchfab.com/3d-models/2025-jackson-storm-1fbf56ab33784349ad02622bd82c4b4c) by supercarmodels (https://sketchfab.com/supercarmodels) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
